@@ -126,7 +126,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     />
                 </Sider>
                 <AntdLayout style={{ padding: '24px 24px' }}>
-                    
                     <Content
                         style={{
                             padding: 24,
@@ -136,11 +135,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                             borderRadius: borderRadiusLG,
                         }}
                     >
-                        <div>{children}/</div>
+                        <div>{children}</div>
                     </Content>
                 </AntdLayout>
             </AntdLayout>
         </AntdLayout>
-
     );
 }

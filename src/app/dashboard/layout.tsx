@@ -135,7 +135,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                             borderRadius: borderRadiusLG,
                         }}
                     >
-                        <div>{children}</div>
+                        <div style={{height:'100%'}}>{children}</div>
                     </Content>
                 </AntdLayout>
             </AntdLayout>

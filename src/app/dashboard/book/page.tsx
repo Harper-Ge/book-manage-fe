@@ -1,8 +1,8 @@
 'use client'
 import React, { useState } from 'react';
-import { Button, Col, Form, Input, Row, Select, Space, Table } from 'antd';
+import { Button, Col, Form, Input, Row, Select, Space, Table, TablePaginationConfig } from 'antd';
 import { useRouter } from 'next/navigation';
-
+import styles from './index.module.css'
 const { Option } = Select;
 const COLUMNS = [
     {
@@ -43,13 +43,67 @@ const COLUMNS = [
 ];
 const dataSource = [
     {
-        key: '1',
+        
         name: '胡彦斌',
         age: 32,
         address: '西湖区湖底公园1号',
     },
     {
-        key: '2',
+         
+        name: '胡彦祖',
+        age: 42,
+        address: '西湖区湖底公园1号',
+    },
+    {
+        
+        name: '胡彦斌',
+        age: 32,
+        address: '西湖区湖底公园1号',
+    },
+    {
+         
+        name: '胡彦祖',
+        age: 42,
+        address: '西湖区湖底公园1号',
+    },
+    {
+        
+        name: '胡彦斌',
+        age: 32,
+        address: '西湖区湖底公园1号',
+    },
+    {
+         
+        name: '胡彦祖',
+        age: 42,
+        address: '西湖区湖底公园1号',
+    },
+    {
+        
+        name: '胡彦斌',
+        age: 32,
+        address: '西湖区湖底公园1号',
+    },
+    {
+         
+        name: '胡彦祖',
+        age: 42,
+        address: '西湖区湖底公园1号',
+    },
+    {
+        
+        name: '胡彦斌',
+        age: 32,
+        address: '西湖区湖底公园1号',
+    },
+    {
+         
+        name: '胡彦祖',
+        age: 42,
+        address: '西湖区湖底公园1号',
+    },
+    {
+         
         name: '胡彦祖',
         age: 42,
         address: '西湖区湖底公园1号',
@@ -58,6 +112,22 @@ const dataSource = [
 export default function Page() {
     const [form] = Form.useForm();
     const { push } = useRouter();
+    const [pagination, setPagination] = useState({
+        current: 1,
+        pageSize: 20,
+        showSizeChanger: true,
+        total: 0,
+    });
+    const columns = [...COLUMNS,
+    {
+        title: '操作', key: "action", render: (_, record) => {
+            return (<Space>
+                <Button type='link' onClick={handleBookEdit}>编辑</Button>
+                <Button type='link' danger>删除</Button>
+            </Space>)
+        }
+    }
+    ]
     const handleChange = (value: string) => {
         console.log(`selected ${value}`);
     };
@@ -72,16 +142,11 @@ export default function Page() {
     const handleBookEdit = () => {
         push('/dashboard/book/edit/id');
     }
-    const columns = [...COLUMNS,
-    {
-        title: '操作', key: "action", dataIndex: "", render: (_, row) => {
-            <>
-                <Button type='link' onClick={handleBookEdit}>编辑</Button>
-                <Button type='link' danger>删除</Button>
-            </>
-        }
+    const handleTableChange = (pagination: TablePaginationConfig) => {
+        console.log(pagination);
+        setPagination(pagination)
     }
-    ]
+
     return (
         <>
             <Form
@@ -133,7 +198,16 @@ export default function Page() {
                     </Col>
                 </Row>
             </Form>
-            <Table dataSource={dataSource} columns={columns} scroll={{ x: 1000 }} />;
+            <div className={styles.tableWrap}>
+                <Table
+                dataSource={dataSource}
+                columns={columns}
+                onChange={handleTableChange}
+                scroll={{ x: 1000 }}
+                pagination={{ ...pagination, showTotal: () => `共${pagination.total}条` }}
+            />;
+            </div>
+            
         </>
     )
 }

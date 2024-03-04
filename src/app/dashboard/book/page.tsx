@@ -1,8 +1,10 @@
 'use client'
-import React, { useState } from 'react';
-import { Button, Col, Form, Input, Row, Select, Space, Table, TablePaginationConfig } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Image, Col, Form, Input, Row, Select, Space, Table, TablePaginationConfig, Tooltip } from 'antd';
 import { useRouter } from 'next/navigation';
 import styles from './index.module.css'
+import axios from 'axios'
+import dayjs from 'dayjs';
 const { Option } = Select;
 const COLUMNS = [
     {
@@ -12,33 +14,48 @@ const COLUMNS = [
     },
     {
         title: '封面',
-        dataIndex: 'age',
-        key: 'age',
+        dataIndex: 'cover',
+        key: 'cover',
+        render: (text: string) => {
+            return <Image
+                width={50}
+                src={text}
+                alt=''
+            />
+        }
     },
     {
         title: '分类',
-        dataIndex: 'address',
-        key: 'address',
+        dataIndex: 'category',
+        key: 'category',
     },
     {
         title: '作者',
-        dataIndex: 'address',
-        key: 'address',
+        dataIndex: 'author',
+        key: 'author',
     },
     {
         title: '描述',
-        dataIndex: 'address',
-        key: 'address',
+        dataIndex: 'description',
+        key: 'description',
+        ellipsis: true,
+        render: (text: string)=>{
+            return <Tooltip title={text} placement='topLeft'>
+                {text}
+            </Tooltip>
+        }
     },
     {
         title: '库存',
-        dataIndex: 'address',
-        key: 'address',
+        dataIndex: 'stock',
+        key: 'stock',
     },
     {
         title: '创建时间',
-        dataIndex: 'address',
-        key: 'address',
+        dataIndex: 'createdAt',
+        key: 'createdAt',
+        width: 120,
+        render: (text:string)=> dayjs(text).format('YYYY-MM-DD')
     },
 ];
 const dataSource = [
@@ -112,12 +129,23 @@ const dataSource = [
 export default function Page() {
     const [form] = Form.useForm();
     const { push } = useRouter();
+    const [data, setData] = useState([]);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 20,
         showSizeChanger: true,
         total: 0,
     });
+    useEffect(() => {
+        async function fetchData() {
+            const res= await axios.get('https://mock.apifox.com/m1/2398938-0-default/api/books')
+            const {data} = res.data
+            console.log(data);
+            setData(data)
+            
+        }
+        fetchData();
+    },[])
     const columns = [...COLUMNS,
     {
         title: '操作', key: "action", render: (_, record) => {
@@ -200,7 +228,7 @@ export default function Page() {
             </Form>
             <div className={styles.tableWrap}>
                 <Table
-                dataSource={dataSource}
+                dataSource={data}
                 columns={columns}
                 onChange={handleTableChange}
                 scroll={{ x: 1000 }}

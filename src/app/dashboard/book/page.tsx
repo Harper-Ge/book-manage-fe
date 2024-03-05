@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import styles from './index.module.css'
 import dayjs from 'dayjs';
 import { getBookList } from '@/app/api/hook';
+import Content from '@/app/components/Content';
 const COLUMNS = [
     {
         title: '名称',
@@ -113,7 +114,7 @@ export default function Page() {
     }
 
     return (
-        <> 
+        <Content title={"图书列表"} operation={<Button type='primary' onClick={()=>push("/dashboard/book/add")}>添加</Button>}> 
             <Form
                 form={form}
                 name="search"
@@ -170,9 +171,9 @@ export default function Page() {
                 onChange={handleTableChange}
                 scroll={{ x: 1000 }}
                 pagination={{ ...pagination, showTotal: () => `共${pagination.total}条` }}
-            />;
+            />
             </div>
             
-        </>
+        </Content>
     )
 }

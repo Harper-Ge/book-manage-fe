@@ -17,6 +17,7 @@ import { BookType } from '@/app/type';
 import { postBookAdd } from '@/app/api/hook';
 import styles from './index.module.css'
 import { useRouter } from 'next/navigation';
+import Content from '../Content';
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
@@ -35,12 +36,11 @@ const BookForm: React.FC = () => {
         push("/dashboard/book")
     }
     return (
-        <>
+        <Content title={"图书添加"}>
             <Form
                 labelCol={{ span: 4 }}
                 wrapperCol={{ span: 18 }}
                 layout="horizontal"
-                className={styles.form}
                 onFinish={handleFinish}
                 form={form}
             >
@@ -96,7 +96,7 @@ const BookForm: React.FC = () => {
                     </Button>
                 </Form.Item>
             </Form>
-        </>
+        </Content>
     );
 };
 

@@ -5,7 +5,7 @@ const { Header, Content, Sider } = AntdLayout;
 import styles from './index.module.css'
 import type { MenuProps } from 'antd';
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 
 const ITEMS = [
@@ -17,12 +17,12 @@ const ITEMS = [
         children: [
             {
                 label: "图书列表",
-                key: "/book",
+                key: "/dashboard/book",
                 //   role: USER_ROLE.USER,
             },
             {
                 label: "图书添加",
-                key: "/book/add",
+                key: "/dashboard/book/add",
                 //   role: USER_ROLE.ADMIN,
             },
         ],
@@ -35,12 +35,12 @@ const ITEMS = [
         children: [
             {
                 label: "借阅列表",
-                key: "/borrow",
+                key: "/dashboard/borrow",
                 //   role: USER_ROLE.USER,
             },
             {
                 label: "书籍借阅",
-                key: "/borrow/add",
+                key: "/dashboard/borrow/add",
                 //   role: USER_ROLE.ADMIN,
             },
         ],
@@ -59,12 +59,12 @@ const ITEMS = [
         children: [
             {
                 label: "用户列表",
-                key: "/user",
+                key: "/dashboard/user",
                 //   role: USER_ROLE.ADMIN,
             },
             {
                 label: "用户添加",
-                key: "/user/add",
+                key: "/dashboard/user/add",
                 //   role: USER_ROLE.ADMIN,
             },
         ],
@@ -77,8 +77,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     } = theme.useToken();
     const { push } = useRouter()
     const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
-        push(`/dashboard${key}`)
+        push(`${key}`)
     }
+    const activeMenu = usePathname();
     const USER_ITEMS: MenuProps['items'] = [
         {
             key: "1",
@@ -118,8 +119,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <Sider width={200} style={{ background: colorBgContainer }}>
                     <Menu
                         mode="inline"
-                        defaultSelectedKeys={['/book']}
+                        defaultSelectedKeys={['/dashboard/book']}
                         defaultOpenKeys={['book']}
+                        selectedKeys={[activeMenu]}
                         style={{ height: '100%', borderRight: 0 }}
                         items={ITEMS}
                         onClick={handleMenuClick}
@@ -128,10 +130,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <AntdLayout style={{ padding: '24px 24px' }}>
                     <Content
                         style={{
-                            padding: 24,
                             margin: 0,
                             minHeight: 280,
-                            background: colorBgContainer,
                             borderRadius: borderRadiusLG,
                         }}
                     >

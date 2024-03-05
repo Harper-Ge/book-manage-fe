@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import styles from './index.module.css'
 import dayjs from 'dayjs';
 import { getBookList } from '@/app/api/hook';
-const { Option } = Select;
 const COLUMNS = [
     {
         title: '名称',
@@ -80,7 +79,7 @@ export default function Page() {
     },[])
     const columns = [...COLUMNS,
     {
-        title: '操作', key: "action", render: (_, record) => {
+        title: '操作', key: "action", render: (_) => {
             return (<Space>
                 <Button type='link' onClick={handleBookEdit}>编辑</Button>
                 <Button type='link' danger>删除</Button>

@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Button, Image, Col, Form, Input, Row, Select, Space, Table, TablePaginationConfig, Tooltip } from 'antd';
 import { useRouter } from 'next/navigation';
 import styles from './index.module.css'
-import axios from 'axios'
 import dayjs from 'dayjs';
+import { getBookList } from '@/app/api/hook';
 const { Option } = Select;
 const COLUMNS = [
     {
@@ -58,74 +58,7 @@ const COLUMNS = [
         render: (text:string)=> dayjs(text).format('YYYY-MM-DD')
     },
 ];
-const dataSource = [
-    {
-        
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-    },
-    {
-         
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-    },
-    {
-        
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-    },
-    {
-         
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-    },
-    {
-        
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-    },
-    {
-         
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-    },
-    {
-        
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-    },
-    {
-         
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-    },
-    {
-        
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-    },
-    {
-         
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-    },
-    {
-         
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-    },
-];
+
 export default function Page() {
     const [form] = Form.useForm();
     const { push } = useRouter();
@@ -138,11 +71,10 @@ export default function Page() {
     });
     useEffect(() => {
         async function fetchData() {
-            const res= await axios.get('https://mock.apifox.com/m1/2398938-0-default/api/books')
-            const {data} = res.data
-            console.log(data);
-            setData(data)
-            
+            const list = await getBookList()
+            const {data} = list;
+            console.log(list);
+            setData(data);
         }
         fetchData();
     },[])
@@ -159,8 +91,14 @@ export default function Page() {
     const handleChange = (value: string) => {
         console.log(`selected ${value}`);
     };
-    const handleSearchFinish = (values) => {
+    const handleSearchFinish = async (values) => {
         console.log(values);
+        const res = await getBookList(values);
+        console.log(res);
+        
+        setData(res.data);
+        setPagination({...pagination, current:1, total: res.total})
+
 
     }
     const handleSearchReset = () => {
@@ -172,11 +110,11 @@ export default function Page() {
     }
     const handleTableChange = (pagination: TablePaginationConfig) => {
         console.log(pagination);
-        setPagination(pagination)
+        setPagination(pagination);
     }
 
     return (
-        <>
+        <> 
             <Form
                 form={form}
                 name="search"

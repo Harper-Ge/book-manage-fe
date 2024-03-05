@@ -1,11 +1,9 @@
 import axios from "axios";
 import qs from "qs";
 import { BookQueryType } from "../type";
+import request from "../utils/request";
 
 
 export async function getBookList(params?: BookQueryType) {
-    const res = await axios.get(`/api/books?${qs.stringify(params)}`)
-    console.log(res.data);
-    
-    return res.data;
+    return request.get(`/api/books?${qs.stringify(params)}`)
 }

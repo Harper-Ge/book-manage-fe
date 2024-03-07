@@ -68,6 +68,10 @@ export default function Page() {
         console.log(data);
         
         setEditData(data);
+        setPagination({
+            ...pagination,
+            total:res.total,
+        })
     }
     useEffect(() => {
         fetchData();

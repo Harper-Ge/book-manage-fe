@@ -14,7 +14,7 @@ import {
 } from 'antd';
 import { Rule } from 'antd/es/form';
 import { BookType } from '@/app/type';
-import { postBookAdd } from '@/app/api/hook';
+import { postBookAdd } from '@/app/api/book';
 import styles from './index.module.css'
 import { useRouter } from 'next/navigation';
 import Content from '../Content';
@@ -25,7 +25,7 @@ const rule = (label: string): Rule[] => [{
     required: true,
     message: `请输入${label}`
 }]
-const BookForm: React.FC = () => {
+const BookForm = ({title}:{title:string}) => {
     const [preview, setPreview] = useState("");
     const [form] = Form.useForm();
     const {push} = useRouter()
@@ -36,7 +36,7 @@ const BookForm: React.FC = () => {
         push("/dashboard/book")
     }
     return (
-        <Content title={"图书添加"}>
+        <Content title={title}>
             <Form
                 labelCol={{ span: 4 }}
                 wrapperCol={{ span: 18 }}

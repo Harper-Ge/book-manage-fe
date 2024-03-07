@@ -1,11 +1,12 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { Button, Image, Col, Form, Input, Row, Select, Space, Table, TablePaginationConfig, Tooltip } from 'antd';
+import { Button, Image, Col, Form, Input, Row, Select, Space, Table, TablePaginationConfig, Tooltip, message } from 'antd';
 import { useRouter } from 'next/navigation';
 import styles from './index.module.css'
 import dayjs from 'dayjs';
-import { getBookList } from '@/app/api/hook';
+import { bookDelete, getBookList } from '@/app/api/book';
 import Content from '@/app/components/Content';
+import { BookQueryType } from '@/app/type';
 const COLUMNS = [
     {
         title: '名称',
@@ -69,21 +70,29 @@ export default function Page() {
         showSizeChanger: true,
         total: 0,
     });
+    async function fetchData(values?: BookQueryType) {
+        const list = await getBookList({
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            ...values,
+        })
+        const {data} = list;
+        setData(data);
+    }
     useEffect(() => {
-        async function fetchData() {
-            const list = await getBookList()
-            const {data} = list;
-            console.log(list);
-            setData(data);
-        }
+
         fetchData();
     },[])
     const columns = [...COLUMNS,
     {
-        title: '操作', key: "action", render: (_) => {
+        title: '操作', key: "action", render: (_:any, row:any) => {
             return (<Space>
-                <Button type='link' onClick={handleBookEdit}>编辑</Button>
-                <Button type='link' danger>删除</Button>
+                <Button type='link' onClick={()=>handleBookEdit(row._id)}>编辑</Button>
+                <Button type='link' danger
+                onClick={() => {
+                    handleBookDelete(row._id)
+                }}
+                >删除</Button>
             </Space>)
         }
     }
@@ -105,14 +114,18 @@ export default function Page() {
         console.log(form);
 
     }
-    const handleBookEdit = () => {
-        push('/dashboard/book/edit/id');
+    const handleBookEdit = (id: string) => {
+        push(`/dashboard/book/edit/${id}`);
     }
     const handleTableChange = (pagination: TablePaginationConfig) => {
         console.log(pagination);
         setPagination(pagination);
     }
-
+    const handleBookDelete = async (id: string) => {
+        await bookDelete(id);
+        message.success("删除成功");
+        fetchData();
+    }
     return (
         <Content title={"图书列表"} operation={<Button type='primary' onClick={()=>push("/dashboard/book/add")}>添加</Button>}> 
             <Form

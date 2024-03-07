@@ -1,4 +1,6 @@
 export interface BookQueryType {
+    current?: number,
+    pageSize?: number,
     name?: string,
     author?: string,
     category?: string,

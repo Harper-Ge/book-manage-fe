@@ -2,9 +2,9 @@ export interface CategoryQueryType {
     _id?: string;
     name?: string;
     level?: number;
-    parentLevel: number;
+    parentLevel?: number;
     current?: number;
-    children: CategoryType[];
+    children?: CategoryType[];
     all?: boolean;
 }
 

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Button,
     DatePicker,
@@ -13,11 +13,12 @@ import {
     InputNumber
 } from 'antd';
 import { Rule } from 'antd/es/form';
-import { BookType } from '@/app/type';
+import { BookType, CategoryType } from '@/app/type';
 import { postBookAdd } from '@/app/api/book';
 import styles from './index.module.css'
 import { useRouter } from 'next/navigation';
 import Content from '../Content';
+import { getCategoryList } from '@/app/api/category';
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
@@ -28,6 +29,7 @@ const rule = (label: string): Rule[] => [{
 const BookForm = ({title}:{title:string}) => {
     const [preview, setPreview] = useState("");
     const [form] = Form.useForm();
+    const [categoryList, setCategoryList] = useState<CategoryType[]>([]);
     const {push} = useRouter()
     const handleFinish = async (values: BookType) => {
         console.log(values);
@@ -35,6 +37,11 @@ const BookForm = ({title}:{title:string}) => {
         message.success("创建成功")
         push("/dashboard/book")
     }
+    useEffect(() => {
+        getCategoryList({all:true}).then((res) => {
+            setCategoryList(res.data);
+        })
+    },[])
     return (
         <Content title={title}>
             <Form
@@ -55,8 +62,14 @@ const BookForm = ({title}:{title:string}) => {
                 </Form.Item>
                 <Form.Item label="分类" name="category"
                     rules={rule("分类")}>
-                    <Select>
-                        <Select.Option value="demo">Demo</Select.Option>
+                    <Select
+                    options={categoryList.map((item) => {
+                        return {
+                            label: item.name,
+                            value: item._id,
+                        }
+                    })}>
+                        
                     </Select>
                 </Form.Item>
                 <Form.Item label="封面" name="cover"

@@ -6,7 +6,8 @@ import styles from './index.module.css'
 import dayjs from 'dayjs';
 import { bookDelete, getBookList } from '@/app/api/book';
 import Content from '@/app/components/Content';
-import { BookQueryType } from '@/app/type';
+import { BookQueryType, CategoryType } from '@/app/type';
+import { getCategoryList } from '@/app/api/category';
 const COLUMNS = [
     {
         title: '名称',
@@ -64,6 +65,7 @@ export default function Page() {
     const [form] = Form.useForm();
     const { push } = useRouter();
     const [data, setData] = useState([]);
+    const [ catagoryList, setCategoryList] = useState<CategoryType[]>([]);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 20,
@@ -78,11 +80,19 @@ export default function Page() {
         })
         const {data} = list;
         setData(data);
+        setPagination({
+            ...pagination,
+            total:list.total,
+        })
     }
     useEffect(() => {
-
         fetchData();
-    },[])
+        getCategoryList({all: true}).then((res) => {
+            console.log('1',res);
+            
+            setCategoryList(res.data);  
+        })
+    }, [])
     const columns = [...COLUMNS,
     {
         title: '操作', key: "action", render: (_:any, row:any) => {
@@ -155,11 +165,12 @@ export default function Page() {
                             <Select
                                 placeholder="请选择"
                                 onChange={handleChange}
-                                options={[
-                                    { value: 'jack', label: 'Jack' },
-                                    { value: 'lucy', label: 'Lucy' },
-                                    { value: 'Yiminghe', label: 'yiminghe' },
-                                ]}
+                                options={catagoryList.map((item) => {
+                                     return {
+                                        label: item.name,
+                                        value: item._id,
+                                     }      
+                                })}
                             />
                         </Form.Item>
                     </Col>

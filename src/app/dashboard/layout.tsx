@@ -50,6 +50,18 @@ const ITEMS = [
         key: "/category",
         //   icon: <ProfileOutlined />,
         //   role: USER_ROLE.ADMIN,
+        children: [
+            {
+                label: "分类列表",
+                key: "/dashboard/category",
+                //   role: USER_ROLE.ADMIN,
+            },
+            {
+                label: "分类添加",
+                key: "/dashboard/category/add",
+                //   role: USER_ROLE.ADMIN,
+            },
+        ]
     },
     {
         label: "用户管理",

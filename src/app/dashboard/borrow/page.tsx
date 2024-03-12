@@ -93,7 +93,7 @@ export default function Page() {
             author: item.book.author,
         }))
         console.log(newData);
-        
+
         setData(newData);
         setPagination({
             ...pagination,
@@ -149,7 +149,9 @@ export default function Page() {
     {
         title: '操作', key: "action", render: (_: any, row: any) => {
             return (<Space>
-                <Button type='link' onClick={() => handleBorrowEdit(row._id)}>编辑</Button>
+                {row.status === 'on' && (<Button type='link'
+                    onClick={() => handleBorrowEdit(row._id)}>
+                    归还</Button>)}
                 <Button type='link' danger
                     onClick={() => {
                         handleBorrowDelete(row._id)

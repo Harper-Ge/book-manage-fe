@@ -1,11 +1,12 @@
 'use client'
-import { Breadcrumb, Layout as AntdLayout, Menu, theme, Dropdown, Space } from 'antd';
+import { Breadcrumb, Layout as AntdLayout, Menu, theme, Dropdown, Space, message } from 'antd';
 import { LaptopOutlined, NotificationOutlined, UserOutlined, ReadOutlined, DownOutlined, SmileOutlined } from '@ant-design/icons';
 const { Header, Content, Sider } = AntdLayout;
 import styles from './index.module.css'
 import type { MenuProps } from 'antd';
 import React from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 
 const ITEMS = [
@@ -95,14 +96,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const USER_ITEMS: MenuProps['items'] = [
         {
             key: "1",
-            label: "个人中心",
+            label: <Link href="user">用户中心</Link>,
           },
           {
             key: "2",
             label: (
               <span
-                onClick={async () => {
+                onClick={() => {
                   push("/login");
+                  message.success("退出成功")
                 }}
               >
                 退出

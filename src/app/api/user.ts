@@ -22,3 +22,7 @@ export async function userUpdate(params: UserType){
 export async function getUserDetail(id: string) {
     return request.get(`/api/users/${id}`)
 }
+
+export async function login(params: Pick<UserType, "name"|"password">) {
+    return request.post("/api/login", params)
+}

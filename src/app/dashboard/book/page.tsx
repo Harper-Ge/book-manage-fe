@@ -27,11 +27,6 @@ const COLUMNS = [
         }
     },
     {
-        title: '分类',
-        dataIndex: 'category',
-        key: 'category',
-    },
-    {
         title: '作者',
         dataIndex: 'author',
         key: 'author',
@@ -79,6 +74,8 @@ export default function Page() {
             ...values,
         })
         const {data} = list;
+        console.log(data);
+        
         setData(data);
         setPagination({
             ...pagination,

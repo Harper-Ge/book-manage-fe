@@ -1,11 +1,10 @@
 'use client'
 import { Tag, Form, Button, Modal, Row, Col, Input, Select, Table, Space, message, TablePaginationConfig } from "antd";
-import dayjs from "dayjs";
 import { categoryDelete, getCategoryList } from "@/app/api/category";
-import list from "antd/es/list";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./index.module.css"
+import Content from "@/app/components/Content";
 
 const LEVEL = {
     ONE: 1,
@@ -127,7 +126,7 @@ export default function Page() {
     ];
 
     return (
-        <>
+        <Content title={"分类列表"} >
             <Form
                 form={form}
                 name="search"
@@ -173,6 +172,6 @@ export default function Page() {
                 pagination={{ ...pagination, showTotal: () => `共${pagination.total}条` }}
             />
             </div>
-        </>
+        </Content>
     );
 }
